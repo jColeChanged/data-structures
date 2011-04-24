@@ -1,0 +1,61 @@
+# Python version
+def fizzbuzz(i):
+    if i % 15 == 0:
+        print "fizzbuzz"
+    elif i % 3 == 0:
+        print "fizz"
+    elif i % 5 == 0:
+        print "buzz"
+    else:
+	    print i
+
+for i in range(1, 100): fizzbuzz(i)
+
+// C++ Version
+#include <iostream>
+void fizzbuzz(int i);
+
+int main(void)
+{
+    for (int i=1; i <= 100; i++)
+    {
+        fizzbuzz(i);
+    }
+}
+
+void fizzbuzz(int i)
+{
+     if (i % 15 == 0)
+     {
+	std::cout << "fizzbuzz\n";
+     }
+     else if (i % 3 == 0)
+     {
+	std::cout << "fizz\n";
+     }
+     else if (i % 5 == 0)
+     {
+        std::cout << "buzz\n";
+     }
+     else
+     {
+	std::cout << i << "\n";
+     }
+}
+
+;; Clojure Version
+(defn evenly-divides? [a b] (zero? (mod a b)))
+
+(defn fizzbuzz [i]
+  (cond 
+    (evenly-divides? i 15)
+      (println "fizzbuzz")
+    (evenly-divides? i 3)
+      (println "fizz")
+    (evenly-divides? i 5)
+      (println "buzz")
+    :default 
+      (println i)))
+
+(doseq [i (range 1 101)] 
+  (fizzbuzz i))
