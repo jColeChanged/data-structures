@@ -5,7 +5,12 @@
 ;; matrix operations. Herein are some of my attempts at translating some of
 ;; these matrix operations into Clojure.
 
-(def test-matrix [[1 2] [1 2]])
+(def test-matrix [[1 2]
+		  [1 2]])
+(def other-test-matrix [[1 2 3 4]
+			[1 2 3 4]
+			[1 2 3 4]
+			[1 2 3 4]])
 
 (defn C_yx
   "Solves C<sub>yx</sub> when multiplying two matrices.
@@ -43,3 +48,56 @@
     (for [y (range num-rows)]
       (for [x (range num-cols)]
 	(C_yx m1 m2 y x num-rows num-cols)))))
+
+;; I want this to return four vectors.
+(defn split
+  "Returns A split through the middle.
+
+  Given a matrix nxm where both n and m are powers of two this
+  splits the matrix into fourths with a lower bound of n^2. Though
+  the upper bound on this function has not been calculated, it is
+  likely to be around n^2 as well.
+
+  Args:
+    A: A NxM matrix to split into fourths which has the property that
+    both n and m are powers of two.
+
+  Returns:
+    The matrix split through the middle into four new matrices such that
+    [[1 2] [3 4]] becomes [[1] [2] [3] [4]]."
+  [A]
+  (let [num-rows (count A)
+	num-cols (count (A 0))
+	row-split (/ num-cols 2)
+	col-split (/ num-rows 2)]
+    [
+     (for [y (range col-split)]
+       (for [x (range row-split)]
+	 ((A y) x)))
+     (for [y (range col-split)]
+       (for [x (range row-split num-cols)]
+	 ((A y) x)))
+     (for [y (range col-split num-rows)]
+       (for [x (range row-split)]
+	 ((A y) x)))
+     (for [y (range col-split num-rows)]
+       (for [x (range row-split num-cols)]
+	 ((A y) x)))]))
+
+(defn matrix-addition
+  "Returns the sume of two matrices A and B.
+
+  This algorithm has a polynomial upper and lower bound of
+  n^2 and is undefined when both A and B are not N by M.
+
+  Args:
+   A: A matrix which is NxM.
+   B: A matrix which is NxM.
+
+  Returns:
+   The sume of A and B."
+  [A B]
+  (let [num-rows (count A) num-cols (count B)]
+    (for [y (range num-rows)]
+      (for [x (range num-cols)]
+	(+ ((A y) x) ((B y) x))))))
